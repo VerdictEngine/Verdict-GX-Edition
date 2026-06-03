@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERDICT! GX Edition</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     LOADING SCREEN
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-loading" class="screen active">
+  <canvas id="loading-canvas"></canvas>
+  <div class="loading-content">
+    <div class="loading-logo">
+      <div class="logo-gavel">⚖</div>
+      <div class="logo-text">
+        <span class="logo-verdict">VERDICT!</span>
+        <span class="logo-gx">GX EDITION</span>
+      </div>
+    </div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar-track">
+        <div class="loading-bar-fill" id="loading-fill"></div>
+      </div>
+      <div class="loading-percent" id="loading-percent">0%</div>
+    </div>
+    <div class="loading-flavor" id="loading-flavor">Summoning the jury...</div>
+  </div>
+  <div class="loading-footer">
+    <span>A courtroom career simulator</span>
+    <span class="dot">◆</span>
+    <span>GX Edition</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN MENU
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-menu" class="screen">
+  <canvas id="menu-canvas"></canvas>
+  <div class="menu-content">
+    <div class="menu-header">
+      <div class="menu-badge">OPERA GX EXCLUSIVE</div>
+      <h1 class="menu-title">
+        <span class="menu-title-v">V</span><span class="menu-title-erdict">ERDICT!</span>
+      </h1>
+      <div class="menu-subtitle">GX EDITION</div>
+      <div class="menu-tagline">Rise through the halls of justice.</div>
+    </div>
+
+    <div class="menu-buttons">
+      <button class="menu-btn primary" id="btn-new-game">
+        <span class="btn-icon">▶</span>
+        <span class="btn-text">New Career</span>
+        <span class="btn-sub">Start your legal journey</span>
+      </button>
+      <button class="menu-btn" id="btn-continue">
+        <span class="btn-icon">◈</span>
+        <span class="btn-text">Continue</span>
+        <span class="btn-sub">Resume saved game</span>
+      </button>
+      <button class="menu-btn" id="btn-settings">
+        <span class="btn-icon">⚙</span>
+        <span class="btn-text">Settings</span>
+        <span class="btn-sub">Audio, display, controls</span>
+      </button>
+      <button class="menu-btn" id="btn-credits">
+        <span class="btn-icon">✦</span>
+        <span class="btn-text">Credits</span>
+        <span class="btn-sub">The team behind the bench</span>
+      </button>
+    </div>
+
+    <div class="menu-decorations">
+      <div class="menu-scales">⚖</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHARACTER CREATION
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-create" class="screen">
+  <div class="create-bg"></div>
+  <div class="create-content">
+    <div class="create-header">
+      <button class="back-btn" data-screen="menu">← Back</button>
+      <h2>Create Your Attorney</h2>
+      <div class="create-step-indicator">
+        <span class="step active" data-step="1">Profile</span>
+        <span class="step-dot">→</span>
+        <span class="step" data-step="2">Specialty</span>
+        <span class="step-dot">→</span>
+        <span class="step" data-step="3">Backstory</span>
+      </div>
+    </div>
+
+    <!-- Step 1: Profile -->
+    <div class="create-step" id="create-step-1">
+      <div class="create-grid">
+        <div class="create-avatar-section">
+          <div class="avatar-display" id="avatar-display">
+            <div class="avatar-body" id="avatar-body"></div>
+            <div class="avatar-name-tag" id="avatar-name-tag">Attorney</div>
+          </div>
+          <div class="avatar-controls">
+            <div class="skin-swatches" id="skin-swatches"></div>
+            <div class="hair-options" id="hair-options"></div>
+            <div class="suit-options" id="suit-options"></div>
+          </div>
+        </div>
+        <div class="create-form">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="char-first" placeholder="Alexandra" maxlength="12">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="char-last" placeholder="Harmon" maxlength="15">
+          </div>
+          <div class="form-group">
+            <label>Gender Presentation</label>
+            <div class="radio-group">
+              <label class="radio-opt active" data-val="she">She/Her</label>
+              <label class="radio-opt" data-val="he">He/Him</label>
+              <label class="radio-opt" data-val="they">They/Them</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Starting Age</label>
+            <div class="slider-wrap">
+              <input type="range" id="char-age" min="24" max="35" value="27">
+              <span id="char-age-val">27</span>
+            </div>
+          </div>
+          <div class="stat-preview">
+            <div class="stat-preview-title">Starting Stats</div>
+            <div class="stat-bars" id="stat-bars-preview"></div>
+          </div>
+        </div>
+      </div>
+      <button class="create-next-btn" id="step1-next">Next: Choose Specialty →</button>
+    </div>
+
+    <!-- Step 2: Specialty -->
+    <div class="create-step hidden" id="create-step-2">
+      <div class="specialty-grid" id="specialty-grid"></div>
+      <div class="specialty-selected" id="specialty-selected">Select a specialty above</div>
+      <div class="create-nav">
+        <button class="create-back-btn" id="step2-back">← Back</button>
+        <button class="create-next-btn" id="step2-next">Next: Backstory →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Backstory -->
+    <div class="create-step hidden" id="create-step-3">
+      <div class="backstory-grid" id="backstory-grid"></div>
+      <div class="create-nav">
+        <button class="create-back-btn" id="step3-back">← Back</button>
+        <button class="create-next-btn begin-career-btn" id="step3-begin">Begin Career ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN GAME - HUB / OVERWORLD
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-hub" class="screen">
+  <div class="hub-header">
+    <div class="hub-player-card">
+      <div class="hub-avatar-mini" id="hub-avatar-mini"></div>
+      <div class="hub-player-info">
+        <div class="hub-player-name" id="hub-player-name">Atty. —</div>
+        <div class="hub-player-rank" id="hub-player-rank">Paralegal</div>
+      </div>
+    </div>
+    <div class="hub-stats-bar">
+      <div class="hub-stat">
+        <span class="hub-stat-label">REP</span>
+        <div class="hub-stat-bar-wrap"><div class="hub-stat-bar rep-bar-fill" id="hub-rep-bar"></div></div>
+        <span class="hub-stat-val" id="hub-rep-val">0</span>
+      </div>
+      <div class="hub-stat">
+        <span class="hub-stat-label">SKILL</span>
+        <div class="hub-stat-bar-wrap"><div class="hub-stat-bar skill-bar-fill" id="hub-skill-bar"></div></div>
+        <span class="hub-stat-val" id="hub-skill-val">0</span>
+      </div>
+      <div class="hub-stat">
+        <span class="hub-stat-label">MORALE</span>
+        <div class="hub-stat-bar-wrap"><div class="hub-stat-bar morale-bar-fill" id="hub-morale-bar"></div></div>
+        <span class="hub-stat-val" id="hub-morale-val">0</span>
+      </div>
+    </div>
+    <div class="hub-right">
+      <div class="hub-money" id="hub-money">$0</div>
+      <div class="hub-date" id="hub-date">Jan 2025</div>
+      <button class="hub-menu-btn" id="hub-pause-btn">☰</button>
+    </div>
+  </div>
+
+  <!-- MAIN HUB MAP (top-down) -->
+  <div class="hub-main">
+    <canvas id="hub-canvas"></canvas>
+    <div class="hub-tooltip" id="hub-tooltip"></div>
+
+    <!-- Location panels that slide in -->
+    <div class="location-panel" id="location-panel">
+      <div class="location-panel-inner" id="location-panel-inner"></div>
+      <button class="location-panel-close" id="location-close">✕</button>
+    </div>
+  </div>
+
+  <!-- Bottom quickbar -->
+  <div class="hub-quickbar">
+    <button class="quick-btn" id="quick-cases" title="Case Docket">
+      <span class="quick-icon">📋</span>
+      <span class="quick-label">Cases</span>
+      <span class="quick-badge" id="cases-badge">3</span>
+    </button>
+    <button class="quick-btn" id="quick-career">
+      <span class="quick-icon">🏛️</span>
+      <span class="quick-label">Career</span>
+    </button>
+    <button class="quick-btn" id="quick-skills">
+      <span class="quick-icon">📚</span>
+      <span class="quick-label">Skills</span>
+    </button>
+    <button class="quick-btn" id="quick-contacts">
+      <span class="quick-icon">👥</span>
+      <span class="quick-label">Contacts</span>
+    </button>
+    <button class="quick-btn" id="quick-journal">
+      <span class="quick-icon">📓</span>
+      <span class="quick-label">Journal</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     COURTROOM SCREEN
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-court" class="screen">
+  <div class="court-wrap">
+    <!-- Top HUD bar -->
+    <div class="court-hud">
+      <div class="court-hud-left">
+        <div class="court-case-id" id="court-case-id">Case #0001</div>
+        <div class="court-case-name" id="court-case-name">People v. Unknown</div>
+      </div>
+      <div class="court-stage-track" id="court-stage-track"></div>
+      <div class="court-hud-right">
+        <div class="court-day" id="court-day">Day 1</div>
+        <button class="court-pause" id="court-pause">⏸</button>
+      </div>
+    </div>
+
+    <!-- Courtroom Scene -->
+    <div class="courtroom-scene" id="courtroom-scene">
+      <canvas id="court-canvas"></canvas>
+
+      <!-- Speech bubble layer -->
+      <div class="speech-layer" id="speech-layer"></div>
+
+      <!-- Character sprites -->
+      <div class="court-chars" id="court-chars"></div>
+    </div>
+
+    <!-- Dialogue / Action panel -->
+    <div class="court-panel" id="court-panel">
+      <div class="court-panel-speaker" id="panel-speaker">Judge Morrison</div>
+      <div class="court-panel-text" id="panel-text">Court is now in session.</div>
+      <div class="panel-continue-hint" id="panel-hint">▼ Click to continue</div>
+    </div>
+
+    <!-- Action choice overlay -->
+    <div class="action-overlay" id="action-overlay" style="display:none">
+      <div class="action-title" id="action-title">Choose your action</div>
+      <div class="action-choices" id="action-choices"></div>
+      <div class="action-sidebar">
+        <div class="action-mood-panel">
+          <div class="action-mood-title">Jury Mood</div>
+          <div class="jury-faces" id="jury-faces"></div>
+        </div>
+        <div class="action-evidence-panel">
+          <div class="action-evidence-title">Quick Evidence</div>
+          <div class="evidence-quick-list" id="evidence-quick-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Objection Overlay -->
+    <div class="objection-splash" id="objection-splash" style="display:none">
+      <div class="obj-word" id="obj-word">OBJECTION!</div>
+      <div class="obj-source" id="obj-source">Defense Counsel</div>
+    </div>
+
+    <!-- Verdict reveal -->
+    <div class="verdict-reveal" id="verdict-reveal" style="display:none">
+      <div class="vr-overlay"></div>
+      <div class="vr-panel">
+        <div class="vr-gavel">⚖</div>
+        <div class="vr-label">THE VERDICT</div>
+        <div class="vr-result" id="vr-result">GUILTY</div>
+        <div class="vr-detail" id="vr-detail"></div>
+        <div class="vr-rewards" id="vr-rewards"></div>
+        <button class="vr-btn" id="vr-continue">Return to Firm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CASE FILE SCREEN
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-casefile" class="screen">
+  <div class="casefile-wrap">
+    <div class="casefile-header">
+      <button class="back-btn" id="casefile-back">← Back to Docket</button>
+      <div class="casefile-stamp" id="casefile-stamp">OPEN</div>
+    </div>
+    <div class="casefile-folder">
+      <div class="casefile-tab-row" id="casefile-tabs"></div>
+      <div class="casefile-body" id="casefile-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     DOCKET (Case Select) 
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-docket" class="screen">
+  <div class="docket-wrap">
+    <div class="docket-header">
+      <button class="back-btn" id="docket-back">← Return to Firm</button>
+      <h2 class="docket-title">Case Docket</h2>
+      <div class="docket-filter-row" id="docket-filters"></div>
+    </div>
+    <div class="docket-list" id="docket-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SKILLS SCREEN
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-skills" class="screen">
+  <div class="skills-wrap">
+    <div class="skills-header">
+      <button class="back-btn" id="skills-back">← Return to Firm</button>
+      <h2>Skills & Development</h2>
+      <div class="skills-points-remaining">Skill Points: <span id="skill-points-display">0</span></div>
+    </div>
+    <div class="skills-grid" id="skills-grid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CAREER SCREEN
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-career" class="screen">
+  <div class="career-wrap">
+    <div class="career-header">
+      <button class="back-btn" id="career-back">← Return to Firm</button>
+      <h2>Career Track</h2>
+    </div>
+    <div class="career-track" id="career-track"></div>
+    <div class="career-achievements" id="career-achievements"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CONTACTS SCREEN
+     ═══════════════════════════════════════════════════════ -->
+<div id="screen-contacts" class="screen">
+  <div class="contacts-wrap">
+    <div class="contacts-header">
+      <button class="back-btn" id="contacts-back">← Return to Firm</button>
+      <h2>Contacts & Allies</h2>
+    </div>
+    <div class="contacts-grid" id="contacts-grid"></div>
+    <div class="contact-detail-panel" id="contact-detail" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SETTINGS OVERLAY
+     ═══════════════════════════════════════════════════════ -->
+<div id="overlay-settings" class="overlay-modal" style="display:none">
+  <div class="settings-panel">
+    <div class="settings-header">
+      <div class="settings-title">⚙ Settings</div>
+      <button class="settings-close" id="settings-close">✕</button>
+    </div>
+
+    <!-- Audio -->
+    <div class="settings-section">
+      <div class="settings-section-title">🔊 Audio</div>
+      <div class="settings-row">
+        <label class="settings-label">Master Volume</label>
+        <div class="settings-control">
+          <input type="range" class="settings-slider" id="setting-master-vol" min="0" max="100" value="80">
+          <span class="settings-slider-val" id="val-master-vol">80%</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Music Volume</label>
+        <div class="settings-control">
+          <input type="range" class="settings-slider" id="setting-music-vol" min="0" max="100" value="60">
+          <span class="settings-slider-val" id="val-music-vol">60%</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">SFX Volume</label>
+        <div class="settings-control">
+          <input type="range" class="settings-slider" id="setting-sfx-vol" min="0" max="100" value="80">
+          <span class="settings-slider-val" id="val-sfx-vol">80%</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Mute All</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-mute" data-on="false">OFF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Display -->
+    <div class="settings-section">
+      <div class="settings-section-title">🖥 Display</div>
+      <div class="settings-row">
+        <label class="settings-label">Dialogue Speed</label>
+        <div class="settings-control">
+          <div class="settings-btn-group">
+            <button class="settings-choice active" data-group="text-speed" data-val="fast">Fast</button>
+            <button class="settings-choice" data-group="text-speed" data-val="normal">Normal</button>
+            <button class="settings-choice" data-group="text-speed" data-val="slow">Slow</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Screen Shake</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-screenshake" data-on="true">ON</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Particle Effects</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-particles" data-on="true">ON</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Reduce Motion</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-reduce-motion" data-on="false">OFF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gameplay -->
+    <div class="settings-section">
+      <div class="settings-section-title">⚖ Gameplay</div>
+      <div class="settings-row">
+        <label class="settings-label">Difficulty</label>
+        <div class="settings-control">
+          <div class="settings-btn-group">
+            <button class="settings-choice" data-group="difficulty" data-val="easy">Easy</button>
+            <button class="settings-choice active" data-group="difficulty" data-val="normal">Normal</button>
+            <button class="settings-choice" data-group="difficulty" data-val="hard">Hard</button>
+          </div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Auto-Save</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-autosave" data-on="true">ON</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Skip Seen Dialogue</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-skip-dialogue" data-on="false">OFF</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label class="settings-label">Show Hints</label>
+        <div class="settings-control">
+          <button class="settings-toggle" id="setting-hints" data-on="true">ON</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-footer">
+      <button class="settings-reset-btn" id="settings-reset">Reset to Defaults</button>
+      <button class="settings-save-btn" id="settings-save">Save & Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAUSE MENU overlay
+     ═══════════════════════════════════════════════════════ -->
+<div id="overlay-pause" class="overlay-modal" style="display:none">
+  <div class="pause-panel">
+    <div class="pause-title">Paused</div>
+    <button class="pause-btn" id="pause-resume">Resume</button>
+    <button class="pause-btn" id="pause-save">Save Game</button>
+    <button class="pause-btn" id="pause-main-menu">Main Menu</button>
+    <button class="pause-btn danger" id="pause-quit">Quit</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     NOTIFICATION TOAST
+     ═══════════════════════════════════════════════════════ -->
+<div id="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TRANSITION WIPE
+     ═══════════════════════════════════════════════════════ -->
+<div id="transition-wipe" class="transition-wipe"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="judge_scene.js"></script>
+<script src="engine.js"></script>
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="court.js"></script>
+<script src="hub.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
