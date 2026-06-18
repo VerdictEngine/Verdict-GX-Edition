@@ -255,7 +255,7 @@
       badge: "Main Release",
       plays: "1,300,000 plays",
       icon: "fa-bolt",
-      img: "images/GX Edition Main Image.webp",
+      img: "images/gx-edition.webp",
       desc: "The biggest edition by far, with over 1.3 million plays. It runs in the browser on GX.games, loads fast, and has the largest set of cases.",
       features: ["The largest player base of any edition", "Regular case updates", "Quick to jump into"]
     },
@@ -282,7 +282,7 @@
       badge: "3D Courtroom",
       plays: "7,900 plays",
       icon: "fa-cubes",
-      img: "images/RBX Edition Main Image.webp",
+      img: "images/rbx-edition.webp",
       desc: "The core game rebuilt inside a 3D Roblox courtroom you can move around in, with controls made for the platform.",
       features: ["A 3D courtroom you can walk around", "Roblox-native controls", "A more social trial space"]
     },
@@ -291,7 +291,7 @@
       badge: "Where It Started",
       plays: "1,500 plays",
       icon: "fa-puzzle-piece",
-      img: "images/Scratch Edition Main Image.png",
+      img: "images/scratch-edition.png",
       desc: "The original prototype. It is short and built around simple yes or no choices, and it teaches the basic rules of how a courtroom works.",
       features: ["Short, simple choices", "Teaches the basic procedural rules", "A good first look at Verdict!"]
     }
