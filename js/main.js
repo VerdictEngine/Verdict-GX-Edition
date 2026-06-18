@@ -9,11 +9,13 @@
   /* ---------------------------------------------------------------
      CONFIG - EDIT THESE
      --------------------------------------------------------------- */
-  // Default game loaded by the "Launch Game Preview" button and the
-  // "Open Full Edition" links when no edition-specific URL is set.
-  // You can use a hosted URL or a local path like "game/index.html".
+  // Build embedded by the "Launch Game Preview" cabinet.
+  // This points at the local GX HTML build in this repo (same origin),
+  // so it embeds and plays. External sites like gx.games and Roblox
+  // block embedding, so use a local path here, not a cross-origin URL.
+  // A cross-origin URL set here will open in a new tab instead.
   // Leave blank to show the built-in placeholder screen.
-  var GAME_URL = ""; // e.g. "https://your-host.example/verdict/index.html"
+  var GAME_URL = "files/index.html";
 
   // Per-edition external links. Falls back to GAME_URL when blank.
   var EDITION_URLS = {
@@ -255,7 +257,7 @@
       badge: "Main Release",
       plays: "1,300,000 plays",
       icon: "fa-bolt",
-      img: "images/gx-edition.webp",
+      img: "Images/gx-edition.webp",
       desc: "The biggest edition by far, with over 1.3 million plays. It runs in the browser on GX.games, loads fast, and has the largest set of cases.",
       features: ["The largest player base of any edition", "Regular case updates", "Quick to jump into"]
     },
@@ -282,7 +284,7 @@
       badge: "3D Courtroom",
       plays: "7,900 plays",
       icon: "fa-cubes",
-      img: "images/rbx-edition.webp",
+      img: "Images/rbx-edition.webp",
       desc: "The core game rebuilt inside a 3D Roblox courtroom you can move around in, with controls made for the platform.",
       features: ["A 3D courtroom you can walk around", "Roblox-native controls", "A more social trial space"]
     },
@@ -291,7 +293,7 @@
       badge: "Where It Started",
       plays: "1,500 plays",
       icon: "fa-puzzle-piece",
-      img: "images/scratch-edition.png",
+      img: "Images/scratch-edition.png",
       desc: "The original prototype. It is short and built around simple yes or no choices, and it teaches the basic rules of how a courtroom works.",
       features: ["Short, simple choices", "Teaches the basic procedural rules", "A good first look at Verdict!"]
     }
@@ -418,8 +420,34 @@
       var f = document.createElement("iframe");
       f.setAttribute("title", "Verdict! Game Preview");
       f.setAttribute("allow", "fullscreen; autoplay; gamepad; clipboard-write");
-      f.setAttribute("allowfullscreen", "");
       f.src = src;
+      return f;
+    }
+
+    // True only for same-origin / relative builds that a browser will let
+    // us embed. Cross-origin sites (gx.games, Roblox, etc.) set
+    // X-Frame-Options and cannot be framed, so we open those in a new tab.
+    function isEmbeddable(src) {
+      if (!src) return true; // placeholder is embeddable
+      if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(src)) return true; // relative path
+      try { return new URL(src, location.href).origin === location.origin; }
+      catch (e) { return false; }
+    }
+
+    function buildExternalPanel(url) {
+      // Shown when the preview target is a site that blocks embedding.
+      var safe = url.replace(/"/g, "&quot;");
+      var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><style>' +
+        'html,body{height:100%;margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(120% 120% at 50% 0%,#1b1714,#0c0a09);color:#e7e5e4;display:flex;align-items:center;justify-content:center;text-align:center}' +
+        '.w{max-width:520px;padding:28px}.g{font-size:50px;color:#e3b762;filter:drop-shadow(0 0 22px rgba(212,162,74,.5))}' +
+        'h1{font-family:Georgia,serif;color:#f1d08a;letter-spacing:.04em;margin:14px 0 6px}p{color:#a8a29e;line-height:1.6;font-size:14px}' +
+        'a{display:inline-flex;align-items:center;gap:8px;margin-top:18px;text-decoration:none;font-weight:600;color:#1a130a;background:linear-gradient(135deg,#f1d08a,#d4a24a);padding:11px 22px;border-radius:9px}</style></head>' +
+        '<body><div class="w"><div class="g">&#9878;</div><h1>Opens in a New Tab</h1>' +
+        '<p>This edition runs on its own site, which does not allow being embedded here. It has opened in a new tab.</p>' +
+        '<a href="' + safe + '" target="_blank" rel="noopener">Open the game &#8599;</a></div></body></html>';
+      var f = document.createElement("iframe");
+      f.setAttribute("title", "Verdict! Preview");
+      f.srcdoc = html;
       return f;
     }
 
@@ -430,15 +458,26 @@
 
       // Short load animation, then inject the embed.
       setTimeout(function () {
-        var src = effectiveUrl(currentEdition);
-        iframe = src ? buildIframe(src) : buildPlaceholder();
-        screen.appendChild(iframe);
+        var src = GAME_URL; // the cabinet always loads the local preview build
+        var embeddable = isEmbeddable(src);
+
+        if (src && !embeddable) {
+          // Can't be framed: open it in a new tab and show a note instead.
+          window.open(src, "_blank", "noopener");
+          iframe = buildExternalPanel(src);
+          screen.appendChild(iframe);
+          status.textContent = "EXTERNAL";
+        } else {
+          iframe = src ? buildIframe(src) : buildPlaceholder();
+          screen.appendChild(iframe);
+          status.textContent = "LIVE";
+          status.classList.add("live");
+          fsBtn.disabled = false;
+          resetBtn.disabled = false;
+        }
+
         overlay.classList.add("hidden-overlay");
         launchBtn.classList.remove("loading");
-        status.textContent = "LIVE";
-        status.classList.add("live");
-        fsBtn.disabled = false;
-        resetBtn.disabled = false;
       }, 1100);
     });
 
