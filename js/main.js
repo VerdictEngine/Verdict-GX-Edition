@@ -56,6 +56,9 @@
     initEditions();
     initBugModal();
     initSmoothNav();
+    initRipples();
+    initCtaGavel();
+    initTilt();
   });
 
   /* ---------------- Header scroll state ---------------- */
@@ -250,6 +253,82 @@
     });
   }
 
+  /* ---------------- Impact ripple (gold buttons) ---------------- */
+  function spawnRipple(e, btn) {
+    if (prefersReduced) return;
+    var r = btn.getBoundingClientRect();
+    var size = Math.max(r.width, r.height);
+    var span = document.createElement("span");
+    span.className = "ripple";
+    span.style.width = span.style.height = size + "px";
+    span.style.left = (e.clientX - r.left - size / 2) + "px";
+    span.style.top = (e.clientY - r.top - size / 2) + "px";
+    btn.appendChild(span);
+    span.addEventListener("animationend", function () { span.remove(); });
+  }
+
+  function initRipples() {
+    $$(".btn-gold").forEach(function (btn) {
+      btn.addEventListener("click", function (e) { spawnRipple(e, btn); });
+    });
+  }
+
+  /* ---------------- CTA gavel slam + screen shake ---------------- */
+  function initCtaGavel() {
+    var cta = $("#primaryCta");
+    var gavel = $("#ctaGavel");
+    var hero = $("#home");
+    if (!cta || !gavel) return;
+
+    function slam() {
+      if (prefersReduced) return;
+      gavel.classList.remove("slam");
+      void gavel.offsetWidth; // restart the animation
+      gavel.classList.add("slam");
+      if (hero) {
+        hero.classList.remove("shake");
+        void hero.offsetWidth;
+        hero.classList.add("shake");
+      }
+    }
+
+    cta.addEventListener("mouseenter", function () { gavel.classList.add("show"); slam(); });
+    cta.addEventListener("mouseleave", function () { gavel.classList.remove("show"); });
+    cta.addEventListener("click", slam);
+    gavel.addEventListener("animationend", function () { gavel.classList.remove("slam"); });
+    if (hero) hero.addEventListener("animationend", function (e) {
+      if (e.target === hero) hero.classList.remove("shake");
+    });
+  }
+
+  /* ---------------- 3D tilt on cards ---------------- */
+  function attachTilt(el, opts) {
+    if (!el || prefersReduced) return;
+    opts = opts || {};
+    var max = opts.max || 6;
+    var lift = opts.lift || 0;
+
+    el.addEventListener("mouseenter", function () { el.classList.add("tilting"); });
+    el.addEventListener("mousemove", function (e) {
+      var r = el.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      var py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform =
+        "perspective(1000px) rotateX(" + (-py * max).toFixed(2) + "deg) rotateY(" +
+        (px * max).toFixed(2) + "deg)" + (lift ? " translateY(-" + lift + "px)" : "");
+    });
+    el.addEventListener("mouseleave", function () {
+      el.classList.remove("tilting");
+      el.style.transform = "";
+    });
+  }
+
+  function initTilt() {
+    attachTilt($("#editionPanel"), { max: 5, lift: 0 });
+    $$(".stat-card").forEach(function (c) { attachTilt(c, { max: 6, lift: 5 }); });
+    $$(".mech-card").forEach(function (c) { attachTilt(c, { max: 9, lift: 6 }); });
+  }
+
   /* ---------------- Editions ---------------- */
   var EDITIONS = {
     gx: {
@@ -257,6 +336,7 @@
       badge: "Main Release",
       plays: "1,300,000 plays",
       icon: "fa-bolt",
+      aura: "rgba(227,183,98,0.5)",
       img: "Images/gx-edition.webp",
       desc: "The biggest edition by far, with over 1.3 million plays. It runs in the browser on GX.games, loads fast, and has the largest set of cases.",
       features: ["The largest player base of any edition", "Regular case updates", "Quick to jump into"]
@@ -266,6 +346,7 @@
       badge: "Desktop Build",
       plays: "9,300 plays",
       icon: "fa-download",
+      aura: "rgba(176,74,69,0.52)",
       img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1600&auto=format&fit=crop",
       desc: "The standalone desktop version. The interface is more responsive and there are more scenarios to work through, so it is the most complete way to play.",
       features: ["More responsive interface", "A wider range of scenarios", "Made for desktop play"]
@@ -275,6 +356,7 @@
       badge: "Browser Build",
       plays: "48,100 plays",
       icon: "fa-globe",
+      aura: "rgba(123,45,45,0.55)",
       img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1600&auto=format&fit=crop",
       desc: "Built out from the early versions into a full courtroom interface that runs in the browser. No install needed.",
       features: ["A full courtroom interface in the browser", "Grew out of the original early builds", "Play instantly, anywhere"]
@@ -284,6 +366,7 @@
       badge: "3D Courtroom",
       plays: "7,900 plays",
       icon: "fa-cubes",
+      aura: "rgba(120,90,150,0.42)",
       img: "Images/rbx-edition.webp",
       desc: "The core game rebuilt inside a 3D Roblox courtroom you can move around in, with controls made for the platform.",
       features: ["A 3D courtroom you can walk around", "Roblox-native controls", "A more social trial space"]
@@ -293,6 +376,7 @@
       badge: "Where It Started",
       plays: "1,500 plays",
       icon: "fa-puzzle-piece",
+      aura: "rgba(212,162,74,0.48)",
       img: "Images/scratch-edition.png",
       desc: "The original prototype. It is short and built around simple yes or no choices, and it teaches the basic rules of how a courtroom works.",
       features: ["Short, simple choices", "Teaches the basic procedural rules", "A good first look at Verdict!"]
@@ -310,6 +394,7 @@
     var desc = $("#editionDesc");
     var features = $("#editionFeatures");
     var playBtn = $("#editionPlay");
+    var aura = $("#editionAura");
     var rendered = null;
 
     function render(key) {
@@ -317,7 +402,12 @@
       if (!e || key === rendered) return;
       rendered = key;
       currentEdition = key;
-      panel.classList.add("swapping");
+
+      // Shift the ambient courtroom light to this edition's tone.
+      if (aura && e.aura) aura.style.setProperty("--aura", e.aura);
+
+      // Fade the panel out, swap content, then stagger it back in.
+      panel.classList.add("is-swapping");
       setTimeout(function () {
         img.onerror = function () {
           // Themed fallback so a missing photo never shows a broken icon
@@ -348,8 +438,13 @@
           playBtn.removeAttribute("target");
           playBtn.removeAttribute("rel");
         }
-        panel.classList.remove("swapping");
-      }, 220);
+
+        panel.classList.remove("is-swapping");
+        // Re-trigger the staggered fade-and-slide of the new content.
+        panel.classList.remove("stagger");
+        void panel.offsetWidth; // force reflow so the animation restarts
+        panel.classList.add("stagger");
+      }, 200);
 
       // Keep the preview cabinet's links pointed at the current edition.
       syncPreviewLinks();

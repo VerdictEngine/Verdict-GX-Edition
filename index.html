@@ -114,8 +114,20 @@
           <span class="text-gold-400 font-600">1,366,800 times</span>.
         </p>
 
-        <div class="mt-9 flex flex-wrap gap-4">
-          <a href="#preview" data-nav class="btn-gold text-base px-7 py-3.5">
+        <div class="mt-9 flex flex-wrap gap-4 hero-cta">
+          <svg class="cta-gavel" id="ctaGavel" viewBox="0 0 80 80" aria-hidden="true">
+            <defs>
+              <linearGradient id="gavelHead" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f1d08a" />
+                <stop offset="1" stop-color="#d4a24a" />
+              </linearGradient>
+            </defs>
+            <rect x="35" y="30" width="10" height="46" rx="5" fill="#6b4a2f" />
+            <rect x="33" y="30" width="4" height="46" rx="2" fill="rgba(0,0,0,.25)" />
+            <rect x="16" y="12" width="48" height="22" rx="8" fill="url(#gavelHead)" />
+            <rect x="22" y="16" width="9" height="14" rx="3" fill="rgba(255,255,255,.3)" />
+          </svg>
+          <a href="#preview" data-nav id="primaryCta" class="btn-gold text-base px-7 py-3.5">
             <i class="fa-solid fa-play mr-2"></i> Play Web Preview
           </a>
           <a href="#editions" data-nav class="btn-ghost text-base px-7 py-3.5">
@@ -285,14 +297,15 @@
       </div>
 
       <!-- Panel -->
-      <div class="mt-10">
-        <div id="editionPanel" class="edition-panel glass-panel reveal grid lg:grid-cols-2 gap-0 overflow-hidden">
+      <div class="mt-10 edition-stage">
+        <div class="edition-aura" id="editionAura" aria-hidden="true"></div>
+        <div id="editionPanel" class="edition-panel glass-panel reveal tilt grid lg:grid-cols-2 gap-0 overflow-hidden">
           <div class="edition-media">
             <img id="editionImg" src="" alt="" class="edition-img" />
             <div class="edition-media-veil"></div>
             <span id="editionBadge" class="edition-badge"></span>
           </div>
-          <div class="p-8 lg:p-12 flex flex-col justify-center">
+          <div id="editionBody" class="p-8 lg:p-12 flex flex-col justify-center">
             <div class="flex items-center gap-3">
               <span id="editionTagIcon" class="edition-tagicon"><i class="fa-solid fa-bolt"></i></span>
               <span id="editionPlays" class="edition-plays"></span>
