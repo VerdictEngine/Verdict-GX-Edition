@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verdict! | A Courtroom Simulation Game by Verdict! Engine</title>
+  <meta name="description" content="Verdict! is a single-player courtroom game by Verdict! Engine. Question witnesses, present evidence, raise objections, and shape the verdict across five editions, with over 1.3 million plays." />
+  <meta name="theme-color" content="#0c0a09" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Verdict! | A Courtroom Simulation Game" />
+  <meta property="og:description" content="Step into the courtroom. Question witnesses, object, and shape the verdict. 1,366,800+ plays across five editions." />
+  <meta property="og:type" content="website" />
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            charcoal: { 950: '#0c0a09', 900: '#14110f', 850: '#1b1714', 800: '#211c18', 700: '#2c2520' },
+            mahogany: { 600: '#7b2d2d', 500: '#9a3b3b', 400: '#b04a45' },
+            gold: { 500: '#d4a24a', 400: '#e3b762', 300: '#f1d08a' }
+          },
+          fontFamily: {
+            display: ['"Cinzel"', 'serif'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body class="bg-charcoal-950 text-stone-200 font-sans antialiased overflow-x-hidden">
+
+  <!-- ===== Ambient background ===== -->
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="bg-grain" aria-hidden="true"></div>
+
+  <!-- ===== HEADER / NAV ===== -->
+  <header id="header" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+    <nav class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="nav-shell flex items-center justify-between h-16 lg:h-[4.5rem] px-4 lg:px-6 rounded-b-2xl">
+        <a href="#home" class="flex items-center gap-3 group" data-nav>
+          <span class="brand-mark"><i class="fa-solid fa-gavel"></i></span>
+          <span class="leading-none">
+            <span class="block font-display font-700 text-gold-300 tracking-wide text-lg">Verdict!</span>
+            <span class="block text-[10px] uppercase tracking-[0.28em] text-stone-400">Engine</span>
+          </span>
+        </a>
+
+        <!-- Desktop links -->
+        <div id="navLinks" class="hidden lg:flex items-center gap-1 relative">
+          <a href="#home" class="nav-link" data-nav>Home</a>
+          <a href="#history" class="nav-link" data-nav>About &amp; History</a>
+          <a href="#editions" class="nav-link" data-nav>Editions</a>
+          <a href="#preview" class="nav-link" data-nav>Play Preview</a>
+          <a href="#founder" class="nav-link" data-nav>Founder</a>
+          <span id="navUnderline" class="nav-underline"></span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="#preview" data-nav class="hidden sm:inline-flex btn-gold text-sm px-4 py-2">
+            <i class="fa-solid fa-play mr-2 text-xs"></i> Play Preview
+          </a>
+          <button id="menuToggle" class="lg:hidden w-10 h-10 grid place-items-center rounded-lg glass-soft" aria-label="Open menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="lg:hidden hidden mx-5 mt-2 rounded-2xl glass-panel p-3">
+      <a href="#home" class="mobile-link" data-nav>Home</a>
+      <a href="#history" class="mobile-link" data-nav>About &amp; History</a>
+      <a href="#editions" class="mobile-link" data-nav>Editions</a>
+      <a href="#preview" class="mobile-link" data-nav>Play Preview</a>
+      <a href="#founder" class="mobile-link" data-nav>Founder</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO / HOME ===== -->
+  <section id="home" class="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden" data-section>
+    <div class="hero-bg" data-parallax="0.04" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <div class="relative z-10 mx-auto max-w-7xl px-5 lg:px-8 grid lg:grid-cols-2 gap-12 items-center w-full">
+      <!-- Copy -->
+      <div class="reveal">
+        <span class="eyebrow"><i class="fa-solid fa-scale-balanced mr-2"></i> Made by Verdict! Engine</span>
+        <h1 class="mt-5 font-display font-800 leading-[1.05] text-5xl sm:text-6xl xl:text-7xl text-white">
+          <span class="text-gold-300">Verdict!</span><br />
+          <span class="text-gradient-gold">A Courtroom</span><br />
+          Simulation Game
+        </h1>
+        <p class="mt-6 max-w-xl text-stone-300/90 text-lg leading-relaxed">
+          Verdict! is a single-player courtroom game. You question witnesses, hand in evidence
+          at the right moment, object when something is off, and try to win the case. It comes
+          down to reading people and thinking things through. So far it has been played more than
+          <span class="text-gold-400 font-600">1,366,800 times</span>.
+        </p>
+
+        <div class="mt-9 flex flex-wrap gap-4">
+          <a href="#preview" data-nav class="btn-gold text-base px-7 py-3.5">
+            <i class="fa-solid fa-play mr-2"></i> Play Web Preview
+          </a>
+          <a href="#editions" data-nav class="btn-ghost text-base px-7 py-3.5">
+            <i class="fa-solid fa-layer-group mr-2"></i> View All Editions
+          </a>
+        </div>
+
+        <div class="mt-10 flex items-center gap-6 text-sm text-stone-400">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-star text-gold-400"></i> 5 Editions</span>
+          <span class="flex items-center gap-2"><i class="fa-solid fa-users text-gold-400"></i> 1.3M+ Players</span>
+          <span class="flex items-center gap-2"><i class="fa-solid fa-calendar text-gold-400"></i> Since 2024</span>
+        </div>
+      </div>
+
+      <!-- 3D Gavel scene -->
+      <div class="reveal" style="--delay:120ms">
+        <div id="heroScene" class="hero-scene mx-auto">
+          <div class="scene-layer scene-ring" data-depth="14"></div>
+          <div class="scene-layer scene-glow" data-depth="8"></div>
+          <div class="scene-layer scene-scales" data-depth="34">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <div class="scene-layer scene-gavel" data-depth="52">
+            <i class="fa-solid fa-gavel"></i>
+          </div>
+          <div class="scene-layer scene-block" data-depth="26"></div>
+          <div class="scene-spark s1" data-depth="60"></div>
+          <div class="scene-spark s2" data-depth="44"></div>
+          <div class="scene-spark s3" data-depth="72"></div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#stats" data-nav class="scroll-cue" aria-label="Scroll down">
+      <i class="fa-solid fa-chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- ===== STATS DASHBOARD ===== -->
+  <section id="stats" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center reveal">
+        <span class="eyebrow"><i class="fa-solid fa-chart-line mr-2"></i> The Numbers</span>
+        <h2 class="section-title mt-4">Plays So Far</h2>
+        <p class="section-sub">Total plays across every edition of the game.</p>
+      </div>
+
+      <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="stat-card stat-feature reveal sm:col-span-2 lg:col-span-3">
+          <i class="fa-solid fa-infinity stat-icon"></i>
+          <div>
+            <div class="stat-label">Total Plays, All Editions</div>
+            <div class="stat-number" data-count="1366800" data-suffix="+">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card reveal">
+          <i class="fa-solid fa-bolt stat-icon"></i>
+          <div class="stat-label">GX Edition</div>
+          <div class="stat-number" data-count="1300000">0</div>
+        </div>
+        <div class="stat-card reveal" style="--delay:80ms">
+          <i class="fa-solid fa-globe stat-icon"></i>
+          <div class="stat-label">Website Edition</div>
+          <div class="stat-number" data-count="48100">0</div>
+        </div>
+        <div class="stat-card reveal" style="--delay:160ms">
+          <i class="fa-solid fa-download stat-icon"></i>
+          <div class="stat-label">Flagship / Download</div>
+          <div class="stat-number" data-count="9300">0</div>
+        </div>
+        <div class="stat-card reveal" style="--delay:240ms">
+          <i class="fa-solid fa-cubes stat-icon"></i>
+          <div class="stat-label">Roblox Edition</div>
+          <div class="stat-number" data-count="7900">0</div>
+        </div>
+        <div class="stat-card reveal" style="--delay:320ms">
+          <i class="fa-solid fa-puzzle-piece stat-icon"></i>
+          <div class="stat-label">Scratch Edition</div>
+          <div class="stat-number" data-count="1500">0</div>
+        </div>
+        <div class="stat-card stat-cta reveal" style="--delay:400ms">
+          <i class="fa-solid fa-trophy stat-icon"></i>
+          <div class="stat-label">Milestone</div>
+          <div class="text-gold-300 font-display font-700 text-2xl mt-1">1.3M Plays</div>
+          <p class="text-stone-400 text-sm mt-1">The GX Edition passed 1.3 million plays.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GAMEPLAY & MECHANICS ===== -->
+  <section id="gameplay" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-14 items-center">
+        <div class="reveal">
+          <span class="eyebrow"><i class="fa-solid fa-book-open mr-2"></i> Gameplay</span>
+          <h2 class="section-title mt-4 text-left">How a Case Plays Out</h2>
+          <p class="mt-5 text-stone-300/90 leading-relaxed">
+            <span class="text-gold-300 font-600">Verdict!</span> is a single-player game where each
+            case is a small puzzle of testimony, evidence, and procedure. You read a witness statement
+            closely, hold the right exhibit until it actually matters, and learn when staying quiet
+            beats raising an objection.
+          </p>
+          <p class="mt-4 text-stone-300/90 leading-relaxed">
+            It rewards <span class="text-gold-400">careful thinking</span>,
+            <span class="text-gold-400">legal reasoning</span>, and a bit of
+            <span class="text-gold-400">procedural knowledge</span> rather than fast reflexes. You build
+            the case argument by argument, and the verdict follows from the choices you make.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <span class="chip"><i class="fa-solid fa-brain"></i> Careful Thinking</span>
+            <span class="chip"><i class="fa-solid fa-scale-balanced"></i> Legal Reasoning</span>
+            <span class="chip"><i class="fa-solid fa-clipboard-list"></i> Procedure</span>
+            <span class="chip"><i class="fa-solid fa-masks-theater"></i> Story-Driven</span>
+          </div>
+        </div>
+
+        <!-- Mechanics grid -->
+        <div class="grid sm:grid-cols-2 gap-5">
+          <article class="mech-card reveal" tabindex="0">
+            <div class="mech-emoji">🔍</div>
+            <h3 class="mech-title">Examine Witnesses</h3>
+            <p class="mech-text">Read statements line by line and catch the contradictions hiding in plain sight.</p>
+            <span class="mech-glow"></span>
+          </article>
+          <article class="mech-card reveal" style="--delay:90ms" tabindex="0">
+            <div class="mech-emoji">💼</div>
+            <h3 class="mech-title">Present Evidence</h3>
+            <p class="mech-text">Bring out exhibits at the right moment to break a testimony apart.</p>
+            <span class="mech-glow"></span>
+          </article>
+          <article class="mech-card reveal" style="--delay:180ms" tabindex="0">
+            <div class="mech-emoji">🫵</div>
+            <h3 class="mech-title">Raise Objections</h3>
+            <p class="mech-text">Call out Hearsay, Leading Questions, or Relevance, and make them stick.</p>
+            <span class="mech-glow"></span>
+          </article>
+          <article class="mech-card reveal" style="--delay:270ms" tabindex="0">
+            <div class="mech-emoji">⚖️</div>
+            <h3 class="mech-title">Influence Verdicts</h3>
+            <p class="mech-text">Shape how each case ends through the legal choices you make along the way.</p>
+            <span class="mech-glow"></span>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EDITIONS ===== -->
+  <section id="editions" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center reveal">
+        <span class="eyebrow"><i class="fa-solid fa-layer-group mr-2"></i> The Editions</span>
+        <h2 class="section-title mt-4">Five Editions, One Game</h2>
+        <p class="section-sub">Pick an edition to see how Verdict! works on each platform.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div id="editionTabs" class="mt-12 flex flex-wrap justify-center gap-3 reveal" role="tablist">
+        <button class="edition-tab is-active" data-edition="gx" role="tab"><i class="fa-solid fa-bolt"></i> GX</button>
+        <button class="edition-tab" data-edition="flagship" role="tab"><i class="fa-solid fa-download"></i> Flagship</button>
+        <button class="edition-tab" data-edition="website" role="tab"><i class="fa-solid fa-globe"></i> Website</button>
+        <button class="edition-tab" data-edition="rbx" role="tab"><i class="fa-solid fa-cubes"></i> Roblox</button>
+        <button class="edition-tab" data-edition="scratch" role="tab"><i class="fa-solid fa-puzzle-piece"></i> Scratch</button>
+      </div>
+
+      <!-- Panel -->
+      <div class="mt-10">
+        <div id="editionPanel" class="edition-panel glass-panel reveal grid lg:grid-cols-2 gap-0 overflow-hidden">
+          <div class="edition-media">
+            <img id="editionImg" src="" alt="" class="edition-img" />
+            <div class="edition-media-veil"></div>
+            <span id="editionBadge" class="edition-badge"></span>
+          </div>
+          <div class="p-8 lg:p-12 flex flex-col justify-center">
+            <div class="flex items-center gap-3">
+              <span id="editionTagIcon" class="edition-tagicon"><i class="fa-solid fa-bolt"></i></span>
+              <span id="editionPlays" class="edition-plays"></span>
+            </div>
+            <h3 id="editionTitle" class="font-display font-700 text-3xl text-white mt-4"></h3>
+            <p id="editionDesc" class="mt-4 text-stone-300/90 leading-relaxed"></p>
+            <ul id="editionFeatures" class="mt-6 space-y-2 text-stone-300"></ul>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a id="editionPlay" href="#preview" data-nav class="btn-gold px-6 py-3 text-sm"><i class="fa-solid fa-play mr-2"></i> Play This Edition</a>
+              <button class="btn-ghost px-6 py-3 text-sm" onclick="document.getElementById('editions').scrollIntoView()"><i class="fa-solid fa-circle-info mr-2"></i> Compare</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIVE PREVIEW PLAYER ===== -->
+  <section id="preview" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center reveal">
+        <span class="eyebrow"><i class="fa-solid fa-gamepad mr-2"></i> Live Preview</span>
+        <h2 class="section-title mt-4">Try It in the Browser</h2>
+        <p class="section-sub">Launch the playable preview here, or open the full edition in a new tab.</p>
+      </div>
+
+      <div class="mt-12 grid lg:grid-cols-[1fr_auto] gap-6 items-stretch reveal">
+        <!-- Cabinet -->
+        <div id="cabinet" class="cabinet">
+          <div class="cabinet-bezel">
+            <div class="cabinet-topbar">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span class="cabinet-title">VERDICT! PREVIEW BUILD</span>
+              <span id="cabinetStatus" class="cabinet-status">STANDBY</span>
+            </div>
+
+            <div id="screen" class="cabinet-screen">
+              <!-- Overlay -->
+              <div id="launchOverlay" class="launch-overlay">
+                <div class="launch-scanlines" aria-hidden="true"></div>
+                <i class="fa-solid fa-scale-balanced launch-emblem"></i>
+                <h3 class="font-display font-700 text-2xl text-gold-200">Verdict! Preview</h3>
+                <p class="text-stone-400 text-sm mt-2 max-w-sm text-center">Press launch to load the courtroom. Headphones recommended.</p>
+                <button id="launchBtn" class="btn-gold mt-6 px-8 py-3.5 text-base">
+                  <span class="btn-label"><i class="fa-solid fa-circle-play mr-2"></i> Launch Game Preview</span>
+                  <span class="btn-spinner"><span class="spinner"></span> Loading courtroom...</span>
+                </button>
+                <a id="overlayExternal" href="#" target="_blank" rel="noopener" class="text-xs text-stone-500 hover:text-gold-400 mt-4 transition-colors duration-300">
+                  or open the full edition in a new tab <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                </a>
+              </div>
+              <!-- iframe injected here by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar controls -->
+        <aside class="cabinet-controls glass-panel">
+          <div class="text-xs uppercase tracking-[0.2em] text-stone-500 mb-1">Console</div>
+          <h4 class="font-display text-gold-300 text-lg mb-4">Controls</h4>
+          <button id="ctlFullscreen" class="ctl-btn" disabled><i class="fa-solid fa-expand"></i> Fullscreen</button>
+          <button id="ctlReset" class="ctl-btn" disabled><i class="fa-solid fa-rotate-left"></i> Reset Game</button>
+          <a id="ctlExternal" href="#" target="_blank" rel="noopener" class="ctl-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Edition</a>
+          <button id="ctlBug" class="ctl-btn ctl-bug"><i class="fa-solid fa-bug"></i> Bugs &amp; Suggestions</button>
+
+          <div class="ctl-divider"></div>
+          <div class="text-xs text-stone-500 leading-relaxed">
+            <p class="flex items-center gap-2 mb-1"><i class="fa-solid fa-circle-info text-gold-500"></i> Tip</p>
+            Set your hosted game URL in <code class="text-gold-400">js/main.js</code> at <code class="text-gold-400">GAME_URL</code>.
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HISTORY / CHRONICLE ===== -->
+  <section id="history" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center reveal">
+        <span class="eyebrow"><i class="fa-solid fa-clock-rotate-left mr-2"></i> History</span>
+        <h2 class="section-title mt-4">From an Idea to 1.3 Million Plays</h2>
+        <p class="section-sub">How Verdict! Engine got here, one step at a time.</p>
+      </div>
+
+      <div class="timeline mt-16">
+        <div class="t-item reveal">
+          <div class="t-dot"></div>
+          <div class="t-card glass-panel">
+            <span class="t-date">Late 2024</span>
+            <h3 class="t-title">The Idea</h3>
+            <p class="t-text">Rahul Awasthi starts work on Verdict!, a courtroom game that mixes storytelling with realistic legal mechanics.</p>
+          </div>
+        </div>
+        <div class="t-item reveal" style="--delay:80ms">
+          <div class="t-dot"></div>
+          <div class="t-card glass-panel">
+            <span class="t-date">Early 2025</span>
+            <h3 class="t-title">First Builds</h3>
+            <p class="t-text">The Scratch Edition ships as a quick, educational prototype of simple courtroom choices and proves the core idea works.</p>
+          </div>
+        </div>
+        <div class="t-item reveal" style="--delay:160ms">
+          <div class="t-dot"></div>
+          <div class="t-card glass-panel">
+            <span class="t-date">2025</span>
+            <h3 class="t-title">More Platforms</h3>
+            <p class="t-text">The Website and Roblox editions arrive: a full browser courtroom, and a 3D virtual trial space to walk around in.</p>
+          </div>
+        </div>
+        <div class="t-item reveal" style="--delay:240ms">
+          <div class="t-dot"></div>
+          <div class="t-card glass-panel">
+            <span class="t-date">2025 to 2026</span>
+            <h3 class="t-title">The GX Edition Takes Off</h3>
+            <p class="t-text">The GX Edition catches on and becomes the main release, driving most of the growth.</p>
+          </div>
+        </div>
+        <div class="t-item reveal" style="--delay:320ms">
+          <div class="t-dot t-dot-gold"></div>
+          <div class="t-card glass-panel t-card-gold">
+            <span class="t-date">2026</span>
+            <h3 class="t-title">1.3 Million Plays</h3>
+            <p class="t-text">Verdict! passes 1,366,800 total plays, and the number keeps climbing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOUNDER ===== -->
+  <section id="founder" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="founder-card glass-panel reveal grid lg:grid-cols-[320px_1fr] gap-0 overflow-hidden">
+        <div class="founder-portrait">
+          <img src="images/Professional Photo.jpeg" alt="Rahul Awasthi, creator of Verdict!" class="founder-photo" loading="lazy" />
+        </div>
+        <div class="p-8 lg:p-12">
+          <span class="eyebrow"><i class="fa-solid fa-user-tie mr-2"></i> The Founder</span>
+          <h2 class="font-display font-700 text-4xl text-white mt-4">Rahul Awasthi</h2>
+          <p class="text-gold-400 font-500 mt-1">Creator and Lead Developer, Verdict! Engine</p>
+          <p class="mt-6 text-stone-300/90 leading-relaxed">
+            Rahul started Verdict! Engine in late 2024 with one goal: make legal reasoning fun to
+            play with. He builds Verdict! to mix storytelling with realistic simulation, putting you
+            in the advocate's chair and asking you to think like a litigator.
+          </p>
+          <p class="mt-4 text-stone-300/90 leading-relaxed">
+            It went from a single prototype to a five-edition lineup with over 1.3 million plays. The
+            aim has stayed the same the whole way: every case should make you think, not just wait
+            around.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <span class="chip"><i class="fa-solid fa-pen-ruler"></i> Game Design</span>
+            <span class="chip"><i class="fa-solid fa-code"></i> Development</span>
+            <span class="chip"><i class="fa-solid fa-feather"></i> Narrative</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="relative border-t border-white/5 py-14 mt-8">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 grid md:grid-cols-3 gap-10 items-start">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="brand-mark"><i class="fa-solid fa-gavel"></i></span>
+          <span class="font-display font-700 text-gold-300 text-xl">Verdict! Engine</span>
+        </div>
+        <p class="text-stone-400 text-sm mt-4 max-w-xs">A courtroom simulation game about thinking a case through, one verdict at a time.</p>
+      </div>
+      <div>
+        <h4 class="footer-head">Explore</h4>
+        <a href="#home" data-nav class="footer-link">Home</a>
+        <a href="#editions" data-nav class="footer-link">Editions</a>
+        <a href="#preview" data-nav class="footer-link">Play Preview</a>
+        <a href="#history" data-nav class="footer-link">History</a>
+        <a href="#founder" data-nav class="footer-link">Founder</a>
+      </div>
+      <div>
+        <h4 class="footer-head">The Studio</h4>
+        <p class="text-stone-400 text-sm">Created by Rahul Awasthi</p>
+        <p class="text-stone-500 text-xs mt-3">© <span id="year"></span> Verdict! Engine. All rights reserved.</p>
+        <p class="text-stone-600 text-xs mt-1">Verdict! and Verdict! Engine are trademarks of the studio.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bug report / suggestions modal -->
+  <div id="bugModal" class="modal-backdrop hidden">
+    <div class="modal-card glass-panel">
+      <button id="bugClose" class="modal-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <i class="fa-solid fa-bug text-mahogany-400 text-3xl"></i>
+      <h3 class="font-display text-2xl text-white mt-3">Bugs &amp; Suggestions</h3>
+      <p class="text-stone-400 text-sm mt-2">Found something off in the courtroom, or have an idea to make the game better? Send it over. Bug reports and suggestions both welcome.</p>
+      <a id="bugFormLink" href="https://forms.gle/eg5vGGW7pUsPkdWa6" target="_blank" rel="noopener" class="btn-gold w-full mt-5 py-3 inline-flex">
+        <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Open the Form
+      </a>
+      <p class="text-stone-500 text-xs mt-3 text-center">Opens a Google Form in a new tab.</p>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
