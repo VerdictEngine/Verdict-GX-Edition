@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scales of Justice | Verdict! Engine</title>
+  <meta name="description" content="Weigh the evidence on the interactive Scales of Justice. Drag exhibits onto the prosecution or defense pan and watch the verdict swing." />
+  <meta name="theme-color" content="#0c0a09" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          charcoal: { 950: '#0c0a09', 900: '#14110f', 850: '#1b1714', 800: '#211c18', 700: '#2c2520' },
+          mahogany: { 600: '#7b2d2d', 500: '#9a3b3b', 400: '#b04a45' },
+          gold: { 500: '#d4a24a', 400: '#e3b762', 300: '#f1d08a' }
+        },
+        fontFamily: { display: ['"Cinzel"', 'serif'], sans: ['"Inter"', 'system-ui', 'sans-serif'] }
+      } }
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/lab.css" />
+</head>
+
+<body class="bg-charcoal-950 text-stone-200 font-sans antialiased overflow-x-hidden">
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="bg-grain" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header id="header" class="fixed top-0 inset-x-0 z-50 scrolled">
+    <nav class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="nav-shell flex items-center justify-between h-16 lg:h-[4.5rem] px-4 lg:px-6 rounded-b-2xl">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <span class="brand-mark"><i class="fa-solid fa-gavel"></i></span>
+          <span class="leading-none">
+            <span class="block font-display font-700 text-gold-300 tracking-wide text-lg">Verdict!</span>
+            <span class="block text-[10px] uppercase tracking-[0.28em] text-stone-400">Scales of Justice</span>
+          </span>
+        </a>
+        <a href="index.html" class="btn-ghost text-sm px-4 py-2">
+          <i class="fa-solid fa-arrow-left mr-2 text-xs"></i> Back to Site
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="pt-24 lg:pt-28 pb-20">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center">
+        <span class="eyebrow"><i class="fa-solid fa-scale-balanced mr-2"></i> Interactive</span>
+        <h1 class="section-title mt-4">Weigh the Evidence</h1>
+        <p class="section-sub">Drag exhibits onto the prosecution or defense pan. The heavier side tips the scale and swings the verdict.</p>
+      </div>
+
+      <!-- SCALES OF JUSTICE -->
+      <section class="mt-10">
+        <div class="lab-stage scales-stage" id="scalesStage">
+          <div class="scales-aura" aria-hidden="true"></div>
+
+          <!-- Verdict meter -->
+          <div class="verdict-meter">
+            <span class="vm-label vm-guilty">Guilty</span>
+            <div class="vm-track">
+              <div class="vm-fill" id="vmFill"></div>
+              <div class="vm-needle" id="vmNeedle"></div>
+              <div class="vm-center"></div>
+            </div>
+            <span class="vm-label vm-clear">Not Guilty</span>
+          </div>
+          <div class="vm-readout" id="vmReadout">Balanced. Present the evidence.</div>
+
+          <!-- The scale -->
+          <div class="scale-area">
+            <div class="scale-rig" id="scaleRig">
+              <div class="scale-post"></div>
+              <div class="scale-cap"></div>
+              <div class="scale-beam" id="scaleBeam">
+                <div class="scale-arm-left"></div>
+                <div class="scale-arm-right"></div>
+                <div class="pan pan-left" id="panLeft" data-side="left">
+                  <div class="pan-chain"><span></span><span></span></div>
+                  <div class="pan-dish" data-drop="left">
+                    <span class="pan-tag">Prosecution</span>
+                    <div class="pan-items" id="panItemsLeft"></div>
+                  </div>
+                </div>
+                <div class="pan pan-right" id="panRight" data-side="right">
+                  <div class="pan-chain"><span></span><span></span></div>
+                  <div class="pan-dish" data-drop="right">
+                    <span class="pan-tag">Defense</span>
+                    <div class="pan-items" id="panItemsRight"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evidence tray -->
+          <div class="evidence-tray">
+            <div class="tray-head">
+              <span><i class="fa-solid fa-folder-open mr-2 text-gold-400"></i> Evidence Locker</span>
+              <button id="scalesReset" class="tray-reset"><i class="fa-solid fa-rotate-left mr-1"></i> Reset</button>
+            </div>
+            <div class="tray-items" id="trayItems"></div>
+            <p class="tray-hint">Drag a chip onto either pan. Heavier side tips the scale and swings the verdict.</p>
+          </div>
+        </div>
+        <p class="lab-caption">Spring-loaded beam with a live verdict meter. Prosecution weighs toward Guilty, Defense toward Not Guilty.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="relative border-t border-white/5 py-10">
+    <div class="mx-auto max-w-7xl px-5 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="brand-mark"><i class="fa-solid fa-gavel"></i></span>
+        <span class="font-display font-700 text-gold-300">Verdict! Engine</span>
+      </div>
+      <p class="text-stone-500 text-xs">Scales of Justice, built with vanilla JS. <a href="index.html" class="text-gold-400 hover:text-gold-300">Back to the site</a></p>
+    </div>
+  </footer>
+
+  <script src="js/lab.js"></script>
+</body>
+</html>

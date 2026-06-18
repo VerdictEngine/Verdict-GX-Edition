@@ -42,6 +42,7 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/evidence-board.css" />
 </head>
 
 <body class="bg-charcoal-950 text-stone-200 font-sans antialiased overflow-x-hidden">
@@ -73,6 +74,9 @@
         </div>
 
         <div class="flex items-center gap-3">
+          <a href="lab.html" class="hidden md:inline-flex btn-ghost text-sm px-4 py-2">
+            <i class="fa-solid fa-flask mr-2 text-xs"></i> Interactive Lab
+          </a>
           <a href="#preview" data-nav class="hidden sm:inline-flex btn-gold text-sm px-4 py-2">
             <i class="fa-solid fa-play mr-2 text-xs"></i> Play Preview
           </a>
@@ -90,6 +94,7 @@
       <a href="#editions" class="mobile-link" data-nav>Editions</a>
       <a href="#preview" class="mobile-link" data-nav>Play Preview</a>
       <a href="#founder" class="mobile-link" data-nav>Founder</a>
+      <a href="lab.html" class="mobile-link"><i class="fa-solid fa-flask mr-2 text-gold-400"></i>Interactive Lab</a>
     </div>
   </header>
 
@@ -278,6 +283,33 @@
     </div>
   </section>
 
+  <!-- ===== EVIDENCE BOARD ===== -->
+  <section id="board" class="relative py-24" data-section>
+    <div class="mx-auto max-w-7xl px-5 lg:px-8">
+      <div class="text-center reveal">
+        <span class="eyebrow"><i class="fa-solid fa-thumbtack mr-2"></i> Work the Case</span>
+        <h2 class="section-title mt-4">Follow the Evidence</h2>
+        <p class="section-sub">Every case is a web of clues. Drag the evidence around, trace the red string, and click any card to take a closer look.</p>
+      </div>
+
+      <div class="board-stage reveal mt-12" id="boardStage">
+        <div class="board-surface" id="boardSurface">
+          <svg class="board-strings" id="boardStrings" aria-hidden="true"></svg>
+        </div>
+        <div class="board-toolbar">
+          <span class="board-hint"><i class="fa-solid fa-hand-pointer mr-1"></i> Drag the cards</span>
+          <span class="board-hint"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Click to inspect</span>
+          <button id="boardReset" class="board-reset"><i class="fa-solid fa-rotate-left mr-1"></i> Reset board</button>
+        </div>
+        <div class="board-inspect" id="boardInspect" hidden>
+          <div class="board-inspect-card" id="boardInspectCard"></div>
+          <button class="board-inspect-close" id="boardInspectClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <p class="board-caption">A detective's board with parallax depth. Drag the clues, follow the string, click to inspect.</p>
+    </div>
+  </section>
+
   <!-- ===== EDITIONS ===== -->
   <section id="editions" class="relative py-24" data-section>
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
@@ -332,7 +364,7 @@
         <p class="section-sub">Launch the playable preview here, or open the full edition in a new tab.</p>
       </div>
 
-      <div class="mt-12 grid lg:grid-cols-[1fr_auto] gap-6 items-stretch reveal">
+      <div class="mt-12 grid lg:grid-cols-[1fr_260px] gap-6 items-stretch reveal">
         <!-- Cabinet -->
         <div id="cabinet" class="cabinet">
           <div class="cabinet-bezel">
@@ -373,8 +405,8 @@
 
           <div class="ctl-divider"></div>
           <div class="text-xs text-stone-500 leading-relaxed">
-            <p class="flex items-center gap-2 mb-1"><i class="fa-solid fa-circle-info text-gold-500"></i> Tip</p>
-            Set your hosted game URL in <code class="text-gold-400">js/main.js</code> at <code class="text-gold-400">GAME_URL</code>.
+            <p class="flex items-center gap-2 mb-1"><i class="fa-solid fa-lightbulb text-gold-500"></i> Tip</p>
+            Read every witness statement twice before you object. Hold your strongest evidence until it directly contradicts what they just said, that is when it lands hardest.
           </div>
         </aside>
       </div>
@@ -483,6 +515,7 @@
         <a href="#preview" data-nav class="footer-link">Play Preview</a>
         <a href="#history" data-nav class="footer-link">History</a>
         <a href="#founder" data-nav class="footer-link">Founder</a>
+        <a href="lab.html" class="footer-link">Interactive Lab</a>
       </div>
       <div>
         <h4 class="footer-head">The Studio</h4>
@@ -507,6 +540,7 @@
     </div>
   </div>
 
+  <script src="js/evidence-board.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
